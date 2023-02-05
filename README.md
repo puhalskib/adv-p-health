@@ -1,5 +1,7 @@
 # Advanced Project - Health Classifier
 
+University project - Carmen Werrlein, Adetola Oluwatayo, Oluwaseyifunmi Alfred Olaniyan, Ben Puhalski
+
 ## Resources
 
 CDC - 2021 BRFSS Survey Data [Documentation](https://www.cdc.gov/brfss/annual_data/annual_2021.html)
