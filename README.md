@@ -17,3 +17,4 @@ Description of variables in dataset: [PDF](https://www.cdc.gov/brfss/annual_data
 ```bash
 jupyter nbconvert --to html main.ipynb ; mv main.html html/index.html
 ```
+<a href="https://ai.benpuhalski.com">ai.benpuhalski.com</a>
