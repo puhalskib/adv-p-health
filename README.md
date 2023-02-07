@@ -10,7 +10,7 @@ Description of variables in dataset: [PDF](https://www.cdc.gov/brfss/annual_data
 
 ## Setup
 
-[Download](https://www.cdc.gov/brfss/annual_data/2021/files/LLCP2021ASC.zip) the data and extract into the ``data/`` folder.
+[Download](https://www.cdc.gov/brfss/annual_data/2021/files/LLCP2021ASC.zip) the dataset and extract into the ``data/`` directory.
 
 ## Building html
 
