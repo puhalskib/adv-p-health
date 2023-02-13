@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>main</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>preprocessing</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14590,7 +14590,50 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     </script>
     <!-- End of mathjax configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="1.-Dataset-preperation"><strong>1. Dataset preperation</strong><a class="anchor-link" href="#1.-Dataset-preperation">&#182;</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><strong>Preparing, cleaning, normalizint the data used. Clean dataset is exported as a .csv file afterwards, so this script only needs to be run once. The created file will be used in the principal component analysis.</strong></p>
+<p>Taget Variable: DIABETE4: (Have you ever been told you had diabetes?)
+Values:</p>
+<ul>
+<li>1: Yes</li>
+<li>2: only during pregnancy</li>
+<li>3: No</li>
+<li>4: prediabetes/borderline diabetes (so diabetes-risk?)</li>
+<li>7: Dont know (how tf dont u know?</li>
+<li>9: refused answer)</li>
+<li>BLANK: missing/not asked</li>
+</ul>
+<p>drop: BLANKS, 9, 7 
+combine: 2 &amp; 3 as 'no'
+keep 4 ( classify as risk)</p>
+<p>After cleaning:</p>
+<ul>
+<li>0: No</li>
+<li>1: Yes</li>
+<li>2: Is/was at risk</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -14598,14 +14641,15 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Imports ##</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="o">%</span><span class="k">matplotlib</span> inline
-
 <span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">PerformanceWarning</span><span class="p">)</span>
 </pre></div>
@@ -14620,7 +14664,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sas</span><span class="p">(</span><span class="s1">&#39;./data/LLCP2021.XPT&#39;</span><span class="p">)</span>
@@ -14631,15 +14675,21 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">###################################################################### Dataset preperation ###</span>
+
+<span class="c1"># removing 7, 9, NaN from data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">])</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">])</span>
 </pre></div>
 
      </div>
@@ -14647,43 +14697,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Index([&#39;_STATE&#39;, &#39;FMONTH&#39;, &#39;IDATE&#39;, &#39;IMONTH&#39;, &#39;IDAY&#39;, &#39;IYEAR&#39;, &#39;DISPCODE&#39;,
-       &#39;SEQNO&#39;, &#39;_PSU&#39;, &#39;CTELENM1&#39;,
-       ...
-       &#39;_FRTRES1&#39;, &#39;_VEGRES1&#39;, &#39;_FRUTSU1&#39;, &#39;_VEGESU1&#39;, &#39;_FRTLT1A&#39;, &#39;_VEGLT1A&#39;,
-       &#39;_FRT16A&#39;, &#39;_VEG23A&#39;, &#39;_FRUITE1&#39;, &#39;_VEGETE1&#39;],
-      dtype=&#39;object&#39;, length=303)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pca_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># remove colums containing string values (TODO: if time change some of those later to 1-0 etc...)</span>
+<span class="n">cleaned_dataframe_usable</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14691,274 +14716,17 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>_STATE</th>
-      <th>FMONTH</th>
-      <th>DISPCODE</th>
-      <th>_PSU</th>
-      <th>CTELENM1</th>
-      <th>PVTRESD1</th>
-      <th>COLGHOUS</th>
-      <th>STATERE1</th>
-      <th>CELPHON1</th>
-      <th>LADULT1</th>
-      <th>...</th>
-      <th>_FRTRES1</th>
-      <th>_VEGRES1</th>
-      <th>_FRUTSU1</th>
-      <th>_VEGESU1</th>
-      <th>_FRTLT1A</th>
-      <th>_VEGLT1A</th>
-      <th>_FRT16A</th>
-      <th>_VEG23A</th>
-      <th>_FRUITE1</th>
-      <th>_VEGETE1</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>438693.000000</td>
-      <td>438693.000000</td>
-      <td>438693.000000</td>
-      <td>4.386930e+05</td>
-      <td>117786.000000</td>
-      <td>117786.000000</td>
-      <td>30.0</td>
-      <td>117786.0</td>
-      <td>117786.0</td>
-      <td>117786.000000</td>
-      <td>...</td>
-      <td>4.386930e+05</td>
-      <td>4.386930e+05</td>
-      <td>3.876060e+05</td>
-      <td>3.785660e+05</td>
-      <td>438693.000000</td>
-      <td>438693.000000</td>
-      <td>4.386930e+05</td>
-      <td>4.386930e+05</td>
-      <td>4.386930e+05</td>
-      <td>4.386930e+05</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>30.742155</td>
-      <td>6.405680</td>
-      <td>1118.189030</td>
-      <td>2.021006e+09</td>
-      <td>1.000017</td>
-      <td>1.000255</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.006291</td>
-      <td>...</td>
-      <td>8.835473e-01</td>
-      <td>8.629406e-01</td>
-      <td>1.783430e+02</td>
-      <td>2.715442e+02</td>
-      <td>2.270561</td>
-      <td>2.257184</td>
-      <td>9.949669e-01</td>
-      <td>9.926988e-01</td>
-      <td>1.265190e-01</td>
-      <td>1.516619e-01</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>15.334888</td>
-      <td>3.421731</td>
-      <td>38.575453</td>
-      <td>6.383751e+03</td>
-      <td>0.004121</td>
-      <td>0.015957</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.079067</td>
-      <td>...</td>
-      <td>3.207674e-01</td>
-      <td>3.439104e-01</td>
-      <td>6.912931e+02</td>
-      <td>1.036227e+03</td>
-      <td>2.485479</td>
-      <td>2.711460</td>
-      <td>7.076589e-02</td>
-      <td>8.513485e-02</td>
-      <td>3.472441e-01</td>
-      <td>3.785014e-01</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1100.000000</td>
-      <td>2.021000e+09</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.000000</td>
-      <td>...</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>20.000000</td>
-      <td>3.000000</td>
-      <td>1100.000000</td>
-      <td>2.021002e+09</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.000000</td>
-      <td>...</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>5.700000e+01</td>
-      <td>1.140000e+02</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>31.000000</td>
-      <td>6.000000</td>
-      <td>1100.000000</td>
-      <td>2.021004e+09</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.000000</td>
-      <td>...</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+02</td>
-      <td>1.670000e+02</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>41.000000</td>
-      <td>9.000000</td>
-      <td>1100.000000</td>
-      <td>2.021008e+09</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>1.000000</td>
-      <td>...</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>2.000000e+02</td>
-      <td>2.290000e+02</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>78.000000</td>
-      <td>12.000000</td>
-      <td>1200.000000</td>
-      <td>2.021039e+09</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>2.000000</td>
-      <td>...</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>1.980000e+04</td>
-      <td>3.960000e+04</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>1.000000e+00</td>
-      <td>1.000000e+00</td>
-      <td>2.000000e+00</td>
-      <td>2.000000e+00</td>
-    </tr>
-  </tbody>
-</table>
-<p>8 rows × 298 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define DIABETE4 as target var, remove from input variables</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pca_df</span><span class="p">[</span><span class="s1">&#39;DIABETE4&#39;</span><span class="p">])</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">cleaned_dataframe_usable</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;DIABETE4&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14966,40 +14734,32 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 438693 entries, 0 to 438692
-Columns: 303 entries, _STATE to _VEGETE1
-dtypes: float64(298), object(5)
-memory usage: 1014.1+ MB
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># combine answers by changing &quot;3&quot; (no) answers to &quot;0&quot;(no) </span>
+<span class="c1"># combine answers by changing &quot;2&quot; (during pregnancy) answers to &quot;0&quot;(no) </span>
+<span class="c1"># combine answers by changing &quot;4&quot; (at risk) answers to &quot;0&quot;(no) </span>
+<span class="c1"># TODO: include at risk later on!</span>
+<span class="c1">#target.replace(3.0, 0.0, inplace=True)</span>
+<span class="c1">#target.replace(2.0, 0.0, inplace=True)</span>
+<span class="c1">#target.replace(4.0, 0.0, inplace=True)</span>
+
+<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># check if target only consists of 3 values now, o-No, 1-Yes, 2-at risk</span>
+<span class="c1"># print(pd.unique(target[&quot;DIABETE4&quot;]))</span>
+<span class="c1"># print(pd.unique(data[&quot;DIABETE4&quot;]))</span>
+
+<span class="c1"># save feature names in a variable</span>
+<span class="n">feature_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -15007,43 +14767,22 @@ memory usage: 1014.1+ MB
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Index([&#39;_STATE&#39;, &#39;FMONTH&#39;, &#39;IDATE&#39;, &#39;IMONTH&#39;, &#39;IDAY&#39;, &#39;IYEAR&#39;, &#39;DISPCODE&#39;,
-       &#39;SEQNO&#39;, &#39;_PSU&#39;, &#39;CTELENM1&#39;,
-       ...
-       &#39;_FRTRES1&#39;, &#39;_VEGRES1&#39;, &#39;_FRUTSU1&#39;, &#39;_VEGESU1&#39;, &#39;_FRTLT1A&#39;, &#39;_VEGLT1A&#39;,
-       &#39;_FRT16A&#39;, &#39;_VEG23A&#39;, &#39;_FRUITE1&#39;, &#39;_VEGETE1&#39;],
-      dtype=&#39;object&#39;, length=303)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;object&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#print(&quot;No. of columns containing null values&quot;)</span>
+<span class="c1">#print(len(cleaned_dataframe_usable.columns[ cleaned_dataframe_usable.isna().any()]))</span>
+
+<span class="c1">#print(&quot;No. of columns not containing null values&quot;)</span>
+<span class="c1">#print(len(  cleaned_dataframe_usable.columns[cleaned_dataframe_usable.notna().all()]))</span>
+
+<span class="c1">#print(&quot;Total no. of columns in the dataframe&quot;)</span>
+<span class="c1">#print(len(cleaned_dataframe_usable.columns))</span>
 </pre></div>
 
      </div>
@@ -15051,409 +14790,20 @@ memory usage: 1014.1+ MB
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Index([&#39;IDATE&#39;, &#39;IMONTH&#39;, &#39;IDAY&#39;, &#39;IYEAR&#39;, &#39;SEQNO&#39;], dtype=&#39;object&#39;)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;QSTVER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">20</span><span class="p">:</span> <span class="s2">&quot;cell phone single questionnaire&quot;</span><span class="p">,</span> <span class="mi">21</span><span class="p">:</span> <span class="s2">&quot;cell phone multiple questionnaire v1&quot;</span><span class="p">,</span> <span class="mi">22</span><span class="p">:</span> <span class="s2">&quot;cell phone multiple questionnaire v2&quot;</span><span class="p">,</span> <span class="mi">23</span><span class="p">:</span> <span class="s2">&quot;cell phone multiple questionnaire v3&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span> <span class="s2">&quot;landline single questionnaire&quot;</span><span class="p">,</span> <span class="mi">11</span><span class="p">:</span> <span class="s2">&quot;landline multiple questionnaire v1&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="s2">&quot;landline multiple questionnaire v2&quot;</span><span class="p">,</span> <span class="mi">13</span><span class="p">:</span> <span class="s2">&quot;landline multiple questionnaire v3&quot;</span><span class="p">})</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># cleaned_dataframe_usable.to_csv(r&#39;.\data\clean_preprocessed_data.csv&#39;)</span>
 </pre></div>
 
      </div>
 </div>
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>landline single questionnaire            66467
-cell phone single questionnaire         197277
-landline multiple questionnaire v1       22612
-landline multiple questionnaire v2       20622
-cell phone multiple questionnaire v1     55822
-cell phone multiple questionnaire v2     52307
-landline multiple questionnaire v3        8085
-cell phone multiple questionnaire v3     15501
-Name: QSTVER, dtype: int64</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;QSTVER&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;landline sum&#39;</span><span class="si">:</span><span class="s2">14</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;cell phone sum&#39;</span><span class="si">:</span><span class="s2">14</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">a</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">21</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">22</span><span class="p">]</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>landline sum   117786
-cell phone sum 320907
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">DISPCODE</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">1100</span><span class="p">:</span> <span class="s2">&quot;completed interview&quot;</span><span class="p">,</span> <span class="mi">1200</span><span class="p">:</span> <span class="s2">&quot;partial completed interview&quot;</span><span class="p">})</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>completed interview            0.81811
-partial completed interview    0.18189
-Name: DISPCODE, dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">CTELENM1</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;nan&#39;</span><span class="p">:</span> <span class="s1">&#39;cellphone&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">:</span> <span class="s1">&#39;correct number&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">:</span> <span class="s1">&#39;incorrect number&#39;</span><span class="p">})</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>cellphone           320907
-correct number      117784
-incorrect number         2
-Name: CTELENM1, dtype: int64</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">CTELENM1</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>_STATE</th>
-      <th>FMONTH</th>
-      <th>IDATE</th>
-      <th>IMONTH</th>
-      <th>IDAY</th>
-      <th>IYEAR</th>
-      <th>DISPCODE</th>
-      <th>SEQNO</th>
-      <th>_PSU</th>
-      <th>CTELENM1</th>
-      <th>...</th>
-      <th>_FRTRES1</th>
-      <th>_VEGRES1</th>
-      <th>_FRUTSU1</th>
-      <th>_VEGESU1</th>
-      <th>_FRTLT1A</th>
-      <th>_VEGLT1A</th>
-      <th>_FRT16A</th>
-      <th>_VEG23A</th>
-      <th>_FRUITE1</th>
-      <th>_VEGETE1</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>132142</th>
-      <td>23.0</td>
-      <td>1.0</td>
-      <td>b'03182021'</td>
-      <td>b'03'</td>
-      <td>b'18'</td>
-      <td>b'2021'</td>
-      <td>1100.0</td>
-      <td>b'2021000049'</td>
-      <td>2.021000e+09</td>
-      <td>2.0</td>
-      <td>...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>58.0</td>
-      <td>243.0</td>
-      <td>2.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-    <tr>
-      <th>134418</th>
-      <td>23.0</td>
-      <td>10.0</td>
-      <td>b'10132021'</td>
-      <td>b'10'</td>
-      <td>b'13'</td>
-      <td>b'2021'</td>
-      <td>1100.0</td>
-      <td>b'2021002325'</td>
-      <td>2.021002e+09</td>
-      <td>2.0</td>
-      <td>...</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>400.0</td>
-      <td>379.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>5.397605e-79</td>
-      <td>5.397605e-79</td>
-    </tr>
-  </tbody>
-</table>
-<p>2 rows × 303 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">CTELENM1</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">]</span> <span class="c1"># dropping incorrect phone numbers</span>
-<span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[13]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>438693</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data2</span><span class="o">.</span><span class="n">PVTRESD1</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s1">&#39;nan&#39;</span><span class="p">:</span> <span class="s1">&#39;cellphone&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">:</span> <span class="s1">&#39;private res&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">:</span> <span class="s1">&#39;college housing&#39;</span><span class="p">})</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>cellphone          320907
-private res        117754
-college housing        30
-Name: PVTRESD1, dtype: int64</pre>
-</div>
-
-</div>
-
-</div>
-
 </div>
 
 </div>
@@ -15463,848 +14813,10 @@ Name: PVTRESD1, dtype: int64</pre>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>should drop missing values and such before this step</p>
-<p>dropping columns related to state, time of interview, whether they are in college housing or not.</p>
-
+<h2 id="2.PCA"><strong>2.PCA</strong><a class="anchor-link" href="#2.PCA">&#182;</a></h2>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">data2</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;_STATE&#39;</span><span class="p">,</span> <span class="s1">&#39;FMONTH&#39;</span><span class="p">,</span> <span class="s1">&#39;IDATE&#39;</span><span class="p">,</span> <span class="s1">&#39;IMONTH&#39;</span><span class="p">,</span> <span class="s1">&#39;IDAY&#39;</span><span class="p">,</span> <span class="s1">&#39;IYEAR&#39;</span><span class="p">,</span> <span class="s1">&#39;SEQNO&#39;</span><span class="p">,</span> <span class="s1">&#39;DISPCODE&#39;</span><span class="p">,</span> <span class="s1">&#39;_PSU&#39;</span><span class="p">,</span> <span class="s1">&#39;CTELENM1&#39;</span><span class="p">,</span> 
-                <span class="s1">&#39;PVTRESD1&#39;</span><span class="p">,</span> <span class="s1">&#39;COLGHOUS&#39;</span><span class="p">,</span> <span class="s1">&#39;STATERE1&#39;</span><span class="p">,</span> <span class="s1">&#39;CELPHON1&#39;</span><span class="p">,</span> <span class="s1">&#39;LADULT1&#39;</span><span class="p">,</span> <span class="s1">&#39;SAFETIME&#39;</span><span class="p">,</span> <span class="s1">&#39;CTELNUM1&#39;</span><span class="p">,</span> <span class="s1">&#39;CELLFON5&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;CADULT1&#39;</span><span class="p">,</span> <span class="s1">&#39;PVTRESD3&#39;</span><span class="p">,</span> <span class="s1">&#39;CCLGHOUS&#39;</span><span class="p">,</span> <span class="s1">&#39;CSTATE1&#39;</span><span class="p">,</span> <span class="s1">&#39;LANDLINE&#39;</span><span class="p">,</span> <span class="s1">&#39;HHADULT&#39;</span><span class="p">,</span> <span class="s1">&#39;NUMPHON3&#39;</span><span class="p">,</span><span class="s1">&#39;CPDEMO1B&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">size</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[15]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>277</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">di</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;DIABETE4&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">di</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>NUMMEN      0.000064
-_VEG23A     0.000306
-FLSHTMY3    0.000532
-_RFBMI5     0.000541
-FRUIT2      0.000644
-              ...   
-_AGE_G      0.176549
-CHOLMED3    0.209810
-GENHLTH     0.213604
-BPHIGH6     0.240133
-DIABETE4    1.000000
-Length: 264, dtype: float64</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">di</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>264</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">di</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[&#39;DIABAGE3&#39;,
- &#39;INSULIN1&#39;,
- &#39;BLDSUGAR&#39;,
- &#39;FEETCHK3&#39;,
- &#39;DOCTDIAB&#39;,
- &#39;CHKHEMO3&#39;,
- &#39;FEETCHK&#39;,
- &#39;EYEEXAM1&#39;,
- &#39;DIABEYE&#39;,
- &#39;DIABEDU&#39;,
- &#39;TOLDCFS&#39;,
- &#39;HAVECFS&#39;,
- &#39;WORKCFS&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>features that when trying to calculate correlation with Diabetes had value of &quot;NaN</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>All features besides the bottom three CFS (Chronic Fatigue Syndrome) are diabetes questions that would have been asked after it was determined that the patient already most likely had diabetes</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;TOLDCFS&#39;</span><span class="p">,</span> <span class="s1">&#39;HAVECFS&#39;</span><span class="p">,</span> <span class="s1">&#39;WORKCFS&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[19]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>TOLDCFS</th>
-      <th>HAVECFS</th>
-      <th>WORKCFS</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Not one person called had CFS</p>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>438691</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.001</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>COLGSEX  30
-TOLDCFS  0
-HAVECFS  0
-WORKCFS  0
-TRETHEPC 162
-PRIRHEPC 162
-HAVEHEPC 162
-MEDSHEPB 95
-SIGMTES1 63
-VCLNTES1 203
-BLDSTFIT 390
-SDNATES1 390
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;TOLDCFS&#39;</span><span class="p">,</span> <span class="s1">&#39;HAVECFS&#39;</span><span class="p">,</span> <span class="s1">&#39;WORKCFS&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">size</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>274</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[24]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>Index([&#39;COLGSEX&#39;, &#39;NUMADULT&#39;, &#39;LANDSEX&#39;, &#39;NUMMEN&#39;, &#39;NUMWOMEN&#39;, &#39;RESPSLCT&#39;,
-       &#39;CELLSEX&#39;, &#39;SEXVAR&#39;, &#39;GENHLTH&#39;, &#39;PHYSHLTH&#39;,
-       ...
-       &#39;_FRTRES1&#39;, &#39;_VEGRES1&#39;, &#39;_FRUTSU1&#39;, &#39;_VEGESU1&#39;, &#39;_FRTLT1A&#39;, &#39;_VEGLT1A&#39;,
-       &#39;_FRT16A&#39;, &#39;_VEG23A&#39;, &#39;_FRUITE1&#39;, &#39;_VEGETE1&#39;],
-      dtype=&#39;object&#39;, length=274)</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[31]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;SEXVAR&#39;</span><span class="p">,</span> <span class="s1">&#39;GENHLTH&#39;</span><span class="p">,</span> <span class="s1">&#39;PHYSHLTH&#39;</span><span class="p">,</span> <span class="s1">&#39;MENTHLTH&#39;</span><span class="p">,</span> <span class="s1">&#39;POORHLTH&#39;</span><span class="p">,</span> <span class="s1">&#39;PERSDOC3&#39;</span><span class="p">,</span> <span class="s1">&#39;MEDCOST1&#39;</span><span class="p">,</span> <span class="s1">&#39;CHECKUP1&#39;</span><span class="p">,</span> <span class="s1">&#39;EXERANY2&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[31]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>SEXVAR</th>
-      <th>GENHLTH</th>
-      <th>PHYSHLTH</th>
-      <th>MENTHLTH</th>
-      <th>POORHLTH</th>
-      <th>PERSDOC3</th>
-      <th>MEDCOST1</th>
-      <th>CHECKUP1</th>
-      <th>EXERANY2</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>438691.000000</td>
-      <td>438687.000000</td>
-      <td>438688.000000</td>
-      <td>438689.000000</td>
-      <td>233413.000000</td>
-      <td>438689.000000</td>
-      <td>438686.000000</td>
-      <td>438689.000000</td>
-      <td>438689.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>1.535416</td>
-      <td>2.524764</td>
-      <td>63.190026</td>
-      <td>59.923413</td>
-      <td>54.000655</td>
-      <td>1.578873</td>
-      <td>1.942993</td>
-      <td>1.470789</td>
-      <td>1.258044</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.498745</td>
-      <td>1.082068</td>
-      <td>36.222119</td>
-      <td>37.472643</td>
-      <td>38.533457</td>
-      <td>0.892252</td>
-      <td>0.412581</td>
-      <td>1.128489</td>
-      <td>0.522586</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>25.000000</td>
-      <td>15.000000</td>
-      <td>10.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>88.000000</td>
-      <td>88.000000</td>
-      <td>88.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>2.000000</td>
-      <td>3.000000</td>
-      <td>88.000000</td>
-      <td>88.000000</td>
-      <td>88.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>2.000000</td>
-      <td>9.000000</td>
-      <td>99.000000</td>
-      <td>99.000000</td>
-      <td>99.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[36]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;BPHIGH6&#39;</span><span class="p">,</span> <span class="s1">&#39;BPMEDS&#39;</span><span class="p">,</span> <span class="s1">&#39;TOLDHI3&#39;</span><span class="p">,</span> <span class="s1">&#39;CHOLMED3&#39;</span><span class="p">,</span> <span class="s1">&#39;CVDINFR4&#39;</span><span class="p">,</span> <span class="s1">&#39;MARITAL&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCA&#39;</span><span class="p">,</span> <span class="s1">&#39;INCOME3&#39;</span><span class="p">,</span> <span class="s1">&#39;PREGNANT&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[36]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>BPHIGH6</th>
-      <th>BPMEDS</th>
-      <th>TOLDHI3</th>
-      <th>CHOLMED3</th>
-      <th>CVDINFR4</th>
-      <th>MARITAL</th>
-      <th>EDUCA</th>
-      <th>INCOME3</th>
-      <th>PREGNANT</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>438689.000000</td>
-      <td>172132.000000</td>
-      <td>377856.000000</td>
-      <td>377121.000000</td>
-      <td>438689.000000</td>
-      <td>438686.000000</td>
-      <td>438686.000000</td>
-      <td>429844.000000</td>
-      <td>80672.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>2.238438</td>
-      <td>1.187862</td>
-      <td>1.647765</td>
-      <td>1.722198</td>
-      <td>1.979719</td>
-      <td>2.397870</td>
-      <td>5.035267</td>
-      <td>23.222362</td>
-      <td>2.020317</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>1.053717</td>
-      <td>0.507138</td>
-      <td>0.713508</td>
-      <td>0.616784</td>
-      <td>0.470205</td>
-      <td>1.825153</td>
-      <td>1.047852</td>
-      <td>33.568246</td>
-      <td>0.594835</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>4.000000</td>
-      <td>6.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>3.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>5.000000</td>
-      <td>8.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>3.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>3.000000</td>
-      <td>6.000000</td>
-      <td>10.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>99.000000</td>
-      <td>9.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16313,728 +14825,14 @@ SDNATES1 390
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># _EDUCAG may be better than EDUCA</span>
-<span class="c1"># _INCOMG1 may be better than INCOME3</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Standartizing and normalizing data</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">cleaned_dataframe_usable</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># np.mean(x), np.std(x)</span>
 
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[38]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;WEIGHT2&#39;</span><span class="p">,</span> <span class="s1">&#39;HEIGHT3&#39;</span><span class="p">,</span> <span class="s1">&#39;DECIDE&#39;</span><span class="p">,</span> <span class="s1">&#39;DIFFWALK&#39;</span><span class="p">,</span> <span class="s1">&#39;DIFFDRES&#39;</span><span class="p">,</span> <span class="s1">&#39;DIFFALON&#39;</span><span class="p">,</span> <span class="s1">&#39;SMOKE100&#39;</span><span class="p">,</span> <span class="s1">&#39;SMOKDAY2&#39;</span><span class="p">,</span> <span class="s1">&#39;USENOW3&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[38]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>WEIGHT2</th>
-      <th>HEIGHT3</th>
-      <th>DECIDE</th>
-      <th>DIFFWALK</th>
-      <th>DIFFDRES</th>
-      <th>DIFFALON</th>
-      <th>SMOKE100</th>
-      <th>SMOKDAY2</th>
-      <th>USENOW3</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>426875.000000</td>
-      <td>425732.000000</td>
-      <td>421848.000000</td>
-      <td>420682.000000</td>
-      <td>419905.000000</td>
-      <td>418838.000000</td>
-      <td>417459.000000</td>
-      <td>167453.000000</td>
-      <td>416702.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>828.576689</td>
-      <td>809.566046</td>
-      <td>1.932075</td>
-      <td>1.864054</td>
-      <td>1.973032</td>
-      <td>1.947655</td>
-      <td>1.641687</td>
-      <td>2.458039</td>
-      <td>2.961474</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>2356.011913</td>
-      <td>1569.334861</td>
-      <td>0.589893</td>
-      <td>0.535093</td>
-      <td>0.353299</td>
-      <td>0.449092</td>
-      <td>0.721080</td>
-      <td>0.888965</td>
-      <td>0.392549</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>50.000000</td>
-      <td>300.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>150.000000</td>
-      <td>504.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>180.000000</td>
-      <td>507.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>3.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>220.000000</td>
-      <td>511.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>3.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>9999.000000</td>
-      <td>9999.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># _SMOKER3 may be better than SMOKE100 and SMOKDAY2</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[40]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;ECIGNOW1&#39;</span><span class="p">,</span> <span class="s1">&#39;ALCDAY5&#39;</span><span class="p">,</span> <span class="s1">&#39;AVEDRNK3&#39;</span><span class="p">,</span> <span class="s1">&#39;DRNK3GE5&#39;</span><span class="p">,</span> <span class="s1">&#39;MAXDRNKS&#39;</span><span class="p">,</span> <span class="s1">&#39;FLUSHOT7&#39;</span><span class="p">,</span> <span class="s1">&#39;FLSHTMY3&#39;</span><span class="p">,</span> <span class="s1">&#39;IMFVPLA2&#39;</span><span class="p">,</span> <span class="s1">&#39;PNEUVAC4&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[40]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ECIGNOW1</th>
-      <th>ALCDAY5</th>
-      <th>AVEDRNK3</th>
-      <th>DRNK3GE5</th>
-      <th>MAXDRNKS</th>
-      <th>FLUSHOT7</th>
-      <th>FLSHTMY3</th>
-      <th>IMFVPLA2</th>
-      <th>PNEUVAC4</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>415666.000000</td>
-      <td>414204.000000</td>
-      <td>210421.000000</td>
-      <td>209824.000000</td>
-      <td>209262.000000</td>
-      <td>411043.000000</td>
-      <td>211634.000000</td>
-      <td>208391.000000</td>
-      <td>409604.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>3.145523</td>
-      <td>526.709969</td>
-      <td>4.207878</td>
-      <td>66.566232</td>
-      <td>6.056967</td>
-      <td>1.536477</td>
-      <td>149620.976596</td>
-      <td>4.465759</td>
-      <td>2.046879</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.599657</td>
-      <td>355.293681</td>
-      <td>12.773189</td>
-      <td>36.470593</td>
-      <td>14.864479</td>
-      <td>0.783637</td>
-      <td>191307.913158</td>
-      <td>6.957563</td>
-      <td>1.577978</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>101.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>2020.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>3.000000</td>
-      <td>202.000000</td>
-      <td>1.000000</td>
-      <td>30.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>92020.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>3.000000</td>
-      <td>230.000000</td>
-      <td>2.000000</td>
-      <td>88.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>102020.000000</td>
-      <td>5.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>3.000000</td>
-      <td>888.000000</td>
-      <td>3.000000</td>
-      <td>88.000000</td>
-      <td>4.000000</td>
-      <td>2.000000</td>
-      <td>112020.000000</td>
-      <td>5.000000</td>
-      <td>2.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>9.000000</td>
-      <td>999.000000</td>
-      <td>99.000000</td>
-      <td>99.000000</td>
-      <td>99.000000</td>
-      <td>9.000000</td>
-      <td>999999.000000</td>
-      <td>99.000000</td>
-      <td>9.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[34]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># ify</span>
-<span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;RENTHOM1&#39;</span><span class="p">,</span><span class="s1">&#39;EMPLOY1&#39;</span><span class="p">,</span> <span class="s1">&#39;CHILDREN&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>RENTHOM1</th>
-      <th>EMPLOY1</th>
-      <th>CHILDREN</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>438683.000000</td>
-      <td>435103.000000</td>
-      <td>432556.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>1.413032</td>
-      <td>3.803529</td>
-      <td>66.086343</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>0.932789</td>
-      <td>2.873349</td>
-      <td>37.644673</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>5.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>88.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>2.000000</td>
-      <td>7.000000</td>
-      <td>88.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>99.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># _HLTHPLN in stead of PRIMINSR</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[45]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data2</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[[</span><span class="s1">&#39;_AGEG5YR&#39;</span><span class="p">,</span> <span class="s1">&#39;SEXVAR&#39;</span><span class="p">,</span><span class="s1">&#39;_RFCHOL3&#39;</span><span class="p">,</span> <span class="s1">&#39;_CHOLCH3&#39;</span><span class="p">,</span> <span class="s1">&#39;_BMI5&#39;</span><span class="p">,</span><span class="s1">&#39;SMOKE100&#39;</span><span class="p">,</span> <span class="s1">&#39;_MICHD&#39;</span><span class="p">,</span> <span class="s1">&#39;_TOTINDA&#39;</span><span class="p">,</span> <span class="s1">&#39;_FRTLT1A&#39;</span><span class="p">,</span> <span class="s1">&#39;_VEGLT1A&#39;</span><span class="p">,</span> <span class="s1">&#39;_RFHYPE6&#39;</span><span class="p">,</span> <span class="s1">&#39;_EDUCAG&#39;</span><span class="p">,</span> <span class="s1">&#39;_INCOMG1&#39;</span><span class="p">,</span> <span class="s1">&#39;_RFDRHV7&#39;</span><span class="p">,</span><span class="s1">&#39;DIFFWALK&#39;</span><span class="p">,</span> <span class="s1">&#39;DIABETE4&#39;</span><span class="p">]]</span>
-<span class="n">data2</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[45]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>_AGEG5YR</th>
-      <th>SEXVAR</th>
-      <th>_RFCHOL3</th>
-      <th>_CHOLCH3</th>
-      <th>_BMI5</th>
-      <th>SMOKE100</th>
-      <th>_MICHD</th>
-      <th>_TOTINDA</th>
-      <th>_FRTLT1A</th>
-      <th>_VEGLT1A</th>
-      <th>_RFHYPE6</th>
-      <th>_EDUCAG</th>
-      <th>_INCOMG1</th>
-      <th>DIABETE4</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>377541.000000</td>
-      <td>438691.000000</td>
-      <td>391839.000000</td>
-      <td>417459.000000</td>
-      <td>434056.000000</td>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>438691.000000</td>
-      <td>438688.000000</td>
-    </tr>
-    <tr>
-      <th>mean</th>
-      <td>7.726019</td>
-      <td>1.535416</td>
-      <td>1.463001</td>
-      <td>1.716965</td>
-      <td>2855.227657</td>
-      <td>1.641687</td>
-      <td>1.918623</td>
-      <td>1.260892</td>
-      <td>2.270564</td>
-      <td>2.257190</td>
-      <td>1.427244</td>
-      <td>3.068198</td>
-      <td>5.339904</td>
-      <td>2.761945</td>
-    </tr>
-    <tr>
-      <th>std</th>
-      <td>3.645934</td>
-      <td>0.498745</td>
-      <td>0.845037</td>
-      <td>2.036558</td>
-      <td>655.195952</td>
-      <td>0.721080</td>
-      <td>0.273413</td>
-      <td>0.557933</td>
-      <td>2.485483</td>
-      <td>2.711465</td>
-      <td>0.699127</td>
-      <td>1.047387</td>
-      <td>2.391909</td>
-      <td>0.743412</td>
-    </tr>
-    <tr>
-      <th>min</th>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1200.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-    </tr>
-    <tr>
-      <th>25%</th>
-      <td>5.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>2414.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>4.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>50%</th>
-      <td>8.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>2744.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>1.000000</td>
-      <td>3.000000</td>
-      <td>5.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>75%</th>
-      <td>11.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>3174.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>1.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>2.000000</td>
-      <td>4.000000</td>
-      <td>7.000000</td>
-      <td>3.000000</td>
-    </tr>
-    <tr>
-      <th>max</th>
-      <td>14.000000</td>
-      <td>2.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9933.000000</td>
-      <td>9.000000</td>
-      <td>2.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-      <td>9.000000</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># _AGEG5YR Reported age in five-year age categories calculated variable</span>
-<span class="c1"># SEXVAR reported sex</span>
-<span class="c1"># _RFCHOL3 High Cholesterol or not</span>
-<span class="c1"># _CHOLCH3 Cholesterol check within past five years</span>
-<span class="c1"># _BMI5 body mass index 2 decimal places</span>
-<span class="c1"># SMOKE100 smoked at least 100 cigarettes in your entire life? [Note: 5 packs = 100 cigarettes]</span>
-<span class="c1"># _MICHD reported having coronary heart disease (CHD) or myocardial infarction (MI)</span>
-<span class="c1"># _TOTINDA reported doing physical activity or exercise during the past 30 days other than their regular job</span>
-<span class="c1"># _FRTLT1A consume Fruit 1 or more times per day</span>
-<span class="c1"># _VEGLT1A Consume Vegetables 1 or more times per day</span>
-<span class="c1"># _RFHYPE6 been told they have high blood pressure by a doctor, nurse, or other health professional</span>
-<span class="c1"># _EDUCAG level of education completed</span>
-<span class="c1"># _INCOMG1 Computed income categories 1-7(&lt;15000, &gt;200000), 9 (don&#39;t know)</span>
-<span class="c1"># _RFDRHV7 Heavy drinkers (adult men having more than 14 drinks/week and adult women having more than 7 drinks/week)</span>
-<span class="c1"># DIFFWALK have serious difficulty walking or climbing stairs?</span>
-<span class="c1"># DIABETE4 have diabetes</span>
+<span class="c1">## Format back into dataframe</span>
+<span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;feature_names&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">normalized_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">feature_columns</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -17050,7 +14848,22 @@ SDNATES1 390
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#to wich number of features should be reduced? (max 79)</span>
+<span class="n">n_components</span> <span class="o">=</span> <span class="mi">5</span> 
+
+<span class="c1"># actual PCA</span>
+<span class="n">pca_df</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+<span class="n">principal_components</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">column_names</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_components</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;PC&#39;</span><span class="o">+</span><span class="n">count</span><span class="p">)</span>
+
+<span class="n">column_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+
+<span class="n">components_DF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">principal_components</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">column_names</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -17066,18 +14879,18 @@ SDNATES1 390
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># CVDCRHD4 target var (angina or coronary heart disease)</span>
-<span class="c1"># CVDSTRK3 target var (stroke)</span>
-<span class="c1"># ASTHMA3 target var (asthma); ASTHNOW if they still have asthma</span>
-<span class="c1"># CHCSCNCR target var (skin cancer)</span>
-<span class="c1"># CHCOCNCR target var (other cancer)</span>
-<span class="c1"># CHCCOPD3 target var (chronic obstructive pulmonary disease)</span>
-<span class="c1"># ADDEPEV3 target var (depressive disorder)</span>
-<span class="c1"># CHCKDNY2 target var (kidney disease)</span>
-<span class="c1"># DIABETE4 target var (diabetes); if not target var, DIABAGE3</span>
-<span class="c1"># HAVARTH5 target var (arthritis); if not target var, ARTHEXER, ARTHEDU, LMTJOIN3, ARTHDIS2, JOINPAI2</span>
-<span class="c1"># DEAF target var (deaf or hearing difficuly)</span>
-<span class="c1"># BLIND target var (blind or difficulty seeing)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Creating dataframe with percentage each component adds (output is sorted)</span>
+<span class="n">explained_var</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+
+<span class="n">explained_var_per</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">explained_var</span><span class="p">)):</span>    
+    <span class="n">explained_var_per</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">explained_var</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">explained_var_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">explained_var_per</span><span class="p">)</span>
+
+<span class="n">explained_var_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">% o</span><span class="s2">f Information&quot;</span><span class="p">]</span>
+<span class="n">explained_var_df</span><span class="p">[</span><span class="s2">&quot;feature_nr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">explained_var_df</span>
 </pre></div>
 
      </div>
