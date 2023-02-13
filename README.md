@@ -16,7 +16,11 @@ Description of variables in dataset: [PDF](https://www.cdc.gov/brfss/annual_data
 
 ```bash
 jupyter nbconvert --to html main.ipynb ; mv main.html html/index.html
-jupyter nbconvert --to html preprocessing.ipynb ; mv main.html html/pre.html
-jupyter nbconvert --to html playground.ipynb ; mv main.html html/play.html
+jupyter nbconvert --to html preprocessing.ipynb ; mv preprocessing.html html/pre.html
+jupyter nbconvert --to html playground.ipynb ; mv playground.html html/play.html
 ```
 <a href="https://ai.benpuhalski.com">ai.benpuhalski.com</a>
+
+<a href="https://ai.benpuhalski.com">ai.benpuhalski.com/play.html</a>
+
+<a href="https://ai.benpuhalski.com">ai.benpuhalski.com/pre.html</a>
