@@ -22,7 +22,7 @@ jupyter nbconvert --to html playground.ipynb ; mv playground.html html/play.html
 ```
 <a href="https://ai.benpuhalski.com">ai.benpuhalski.com</a>
 
-<a href="https://ai.benpuhalski.com/data_clean.html">ai.benpuhalski.com/play.html</a>
+<a href="https://ai.benpuhalski.com/data_clean.html">ai.benpuhalski.com/data_clean.html</a>
 
 <a href="https://ai.benpuhalski.com/play.html">ai.benpuhalski.com/play.html</a>
 
