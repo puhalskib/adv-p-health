@@ -10,7 +10,9 @@ Description of variables in dataset: [PDF](https://www.cdc.gov/brfss/annual_data
 
 ## Setup
 
-[Download](https://www.cdc.gov/brfss/annual_data/2021/files/LLCP2021ASC.zip) the dataset and extract into the ``data/`` directory.
+1. [Download](https://www.cdc.gov/brfss/annual_data/2021/files/LLCP2021ASC.zip) the dataset and extract into the ``data/`` directory.
+2. Run through ``clean_and_reduce.ipynb`` to get **brfss_reduced.csv**
+3. Run through ``brfss_imputed.ipynb`` to get **brfss_imputed.csv**
 
 ## Building html
 
