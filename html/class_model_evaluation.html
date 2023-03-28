@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>preprocessing</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>class_model_evaluation</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14590,215 +14590,34 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     </script>
     <!-- End of mathjax configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="1.-Dataset-preperation"><strong>1. Dataset preperation</strong><a class="anchor-link" href="#1.-Dataset-preperation">&#182;</a></h2>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><strong>Preparing, cleaning, normalizint the data used. Clean dataset is exported as a .csv file afterwards, so this script only needs to be run once. The created file will be used in the principal component analysis.</strong></p>
-<p>Taget Variable: DIABETE4: (Have you ever been told you had diabetes?)
-Values:</p>
-<ul>
-<li>1: Yes</li>
-<li>2: only during pregnancy</li>
-<li>3: No</li>
-<li>4: prediabetes/borderline diabetes (so diabetes-risk?)</li>
-<li>7: Dont know (how tf dont u know?</li>
-<li>9: refused answer)</li>
-<li>BLANK: missing/not asked</li>
-</ul>
-<p>drop: BLANKS, 9, 7 
-combine: 2 &amp; 3 as 'no'
-keep 4 ( classify as risk)</p>
-<p>After cleaning:</p>
-<ul>
-<li>0: No</li>
-<li>1: Yes</li>
-<li>2: Is/was at risk</li>
-</ul>
-
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Imports ##</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">hyperopt</span> <span class="kn">import</span> <span class="n">fmin</span><span class="p">,</span> <span class="n">tpe</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">STATUS_OK</span><span class="p">,</span> <span class="n">Trials</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">SGDClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">svm</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="kn">import</span> <span class="n">ConvergenceWarning</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">PerformanceWarning</span><span class="p">)</span>
-</pre></div>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
 
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sas</span><span class="p">(</span><span class="s1">&#39;./data/LLCP2021.XPT&#39;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">###################################################################### Dataset preperation ###</span>
-
-<span class="c1"># removing 7, 9, NaN from data</span>
-<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">])</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;DIABETE4&quot;</span><span class="p">])</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pca_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-
-<span class="c1"># remove colums containing string values (TODO: if time change some of those later to 1-0 etc...)</span>
-<span class="n">cleaned_dataframe_usable</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define DIABETE4 as target var, remove from input variables</span>
-<span class="n">target</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pca_df</span><span class="p">[</span><span class="s1">&#39;DIABETE4&#39;</span><span class="p">])</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">cleaned_dataframe_usable</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;DIABETE4&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># combine answers by changing &quot;3&quot; (no) answers to &quot;0&quot;(no) </span>
-<span class="c1"># combine answers by changing &quot;2&quot; (during pregnancy) answers to &quot;0&quot;(no) </span>
-<span class="c1"># combine answers by changing &quot;4&quot; (at risk) answers to &quot;0&quot;(no) </span>
-<span class="c1"># TODO: include at risk later on!</span>
-<span class="c1">#target.replace(3.0, 0.0, inplace=True)</span>
-<span class="c1">#target.replace(2.0, 0.0, inplace=True)</span>
-<span class="c1">#target.replace(4.0, 0.0, inplace=True)</span>
-
-<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pca_df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># check if target only consists of 3 values now, o-No, 1-Yes, 2-at risk</span>
-<span class="c1"># print(pd.unique(target[&quot;DIABETE4&quot;]))</span>
-<span class="c1"># print(pd.unique(data[&quot;DIABETE4&quot;]))</span>
-
-<span class="c1"># save feature names in a variable</span>
-<span class="n">feature_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#print(&quot;No. of columns containing null values&quot;)</span>
-<span class="c1">#print(len(cleaned_dataframe_usable.columns[ cleaned_dataframe_usable.isna().any()]))</span>
-
-<span class="c1">#print(&quot;No. of columns not containing null values&quot;)</span>
-<span class="c1">#print(len(  cleaned_dataframe_usable.columns[cleaned_dataframe_usable.notna().all()]))</span>
-
-<span class="c1">#print(&quot;Total no. of columns in the dataframe&quot;)</span>
-<span class="c1">#print(len(cleaned_dataframe_usable.columns))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># cleaned_dataframe_usable.to_csv(r&#39;.\data\clean_preprocessed_data.csv&#39;)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ConvergenceWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14813,7 +14632,24 @@ keep 4 ( classify as risk)</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="2.PCA"><strong>2.PCA</strong><a class="anchor-link" href="#2.PCA">&#182;</a></h2>
+<p>Notes:</p>
+<ul>
+<li>for final presentation, maybe mention development date for algorithms</li>
+<li>visualisierung für probierte werte</li>
+<li>vergleichbare projekte von anderen + deren reached accuracy ( zum vergleich, um zu beweisen, dass unsere gut?)</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="0.-Data-Prep"><strong>0. Data Prep</strong><a class="anchor-link" href="#0.-Data-Prep">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -14825,14 +14661,7 @@ keep 4 ( classify as risk)</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Standartizing and normalizing data</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">cleaned_dataframe_usable</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="n">feature_names</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="c1"># np.mean(x), np.std(x)</span>
-
-<span class="c1">## Format back into dataframe</span>
-<span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;feature_names&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-<span class="n">normalized_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">feature_columns</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./data/clean_data.csv&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14848,22 +14677,92 @@ keep 4 ( classify as risk)</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#to wich number of features should be reduced? (max 79)</span>
-<span class="n">n_components</span> <span class="o">=</span> <span class="mi">5</span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
-<span class="c1"># actual PCA</span>
-<span class="n">pca_df</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
-<span class="n">principal_components</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># remove colums containing NaN values</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">column_names</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_components</span><span class="p">):</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">column_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;PC&#39;</span><span class="o">+</span><span class="n">count</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">set_axis</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">column_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">column_names</span><span class="p">)</span>
+<span class="c1"># removing target(&#39;diabetes&#39;) from features</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;diabetes&#39;</span><span class="p">]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;diabetes&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">components_DF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">principal_components</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">column_names</span><span class="p">)</span>
+<span class="c1"># splitting into training and test data</span>
+<span class="n">features_train</span><span class="p">,</span> <span class="n">features_test</span><span class="p">,</span> <span class="n">target_train</span><span class="p">,</span> <span class="n">target_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># print(features_train.shape)</span>
+<span class="c1"># print(features_test.shape)</span>
+<span class="c1"># print(target_train.shape)</span>
+<span class="c1"># print(target_test.shape)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="1.-Support-Vector-Machines"><strong>1. Support Vector Machines</strong><a class="anchor-link" href="#1.-Support-Vector-Machines">&#182;</a></h1>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><strong>Conclusion:</strong></p>
+<ul>
+<li>Using a Pipepline/StandartScaler: Best reachable Accuracy: 76 % with max_iter = 93</li>
+</ul>
+<p>-&gt; Dont use, 2. &amp; 3. perform better</p>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Optimizing max_iter to reach the highest possible Accuracy</span>
+
+<span class="c1"># MAX_EVALS should be the same as/max the SEARCHSPACE so all possibilities are tried out</span>
+<span class="c1"># MAX_EVALS = 100</span>
+<span class="c1"># SEARCH_SPACE = [hp.randint(&#39;max_iter&#39;,100)]</span>
+
+<span class="c1">### Optimizaion ##############################################################################################################</span>
+<span class="c1"># def cost_function(max_iter):</span>
+<span class="c1">#     max_iter = max_iter[0]</span>
+<span class="c1">#     print(max_iter)</span>
+<span class="c1">#     if max_iter == 0:</span>
+<span class="c1">#         return 0</span>
+<span class="c1">#     svm_classifier = make_pipeline(StandardScaler(), svm.SVC(max_iter=max_iter)).fit(features_train, target_train)</span>
+<span class="c1">#     svm_predictions = svm_classifier.predict(features_test)</span>
+<span class="c1">#    svm_accuracy = accuracy_score(target_test, svm_predictions)</span>
+<span class="c1"># </span>
+<span class="c1">#     return {&#39;loss&#39;: - svm_accuracy , &#39;status&#39;: STATUS_OK }</span>
+
+<span class="c1"># trials = Trials()</span>
+<span class="c1"># best = fmin(cost_function,</span>
+<span class="c1">#     space = SEARCH_SPACE,</span>
+<span class="c1">#     algo = tpe.suggest,</span>
+<span class="c1">#     max_evals = MAX_EVALS, </span>
+<span class="c1">#     trials = trials)</span>
+
+<span class="c1"># print(best)</span>
 </pre></div>
 
      </div>
@@ -14879,18 +14778,397 @@ keep 4 ( classify as risk)</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Creating dataframe with percentage each component adds (output is sorted)</span>
-<span class="n">explained_var</span> <span class="o">=</span> <span class="n">pca_df</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Predicting for one specific &#39;person&#39; #################################################################################################</span>
 
-<span class="n">explained_var_per</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">explained_var</span><span class="p">)):</span>    
-    <span class="n">explained_var_per</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">explained_var</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+<span class="c1"># max_iter = best[&#39;max_iter&#39;]</span>
+<span class="c1"># svm_classifier = make_pipeline(StandardScaler(), svm.SVC(max_iter=max_iter)).fit(features_train, target_train)</span>
 
-<span class="n">explained_var_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">explained_var_per</span><span class="p">)</span>
+<span class="c1"># taking a random row from the test data to predict a result for:</span>
+<span class="c1"># def make_test_prediction(svm_classifier):</span>
+<span class="c1">#     rand_index = random.randint(0, 32581)</span>
+<span class="c1">#     test_row = features_test.iloc[rand_index] #.values.flatten().tolist()</span>
+<span class="c1">#     test_groundtruth = target_test.iloc[rand_index]</span>
+<span class="c1">#     prediction = svm_classifier.predict([test_row])</span>
+<span class="c1">#     </span>
+<span class="c1">#     return (prediction, test_groundtruth)</span>
 
-<span class="n">explained_var_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">% o</span><span class="s2">f Information&quot;</span><span class="p">]</span>
-<span class="n">explained_var_df</span><span class="p">[</span><span class="s2">&quot;feature_nr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">column_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">explained_var_df</span>
+<span class="c1"># prediction, test_groundtruth = make_test_prediction(svm_classifier)</span>
+<span class="c1"># print (prediction == test_groundtruth)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="2.-Stocastic-Gradient-Descent"><strong>2. Stocastic Gradient Descent</strong><a class="anchor-link" href="#2.-Stocastic-Gradient-Descent">&#182;</a></h1>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><strong>Conclusion:</strong></p>
+<ul>
+<li>Using a Pipepline/StandartScaler: Best reachable Accuracy:  88%, with max_iter = 14</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Optimizing max_iter to reach the highest possible Accuracy</span>
+
+<span class="c1"># MAX_EVALS should be the same as/max the SEARCHSPACE so all possibilities are tried out</span>
+<span class="n">MAX_EVALS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">SEARCH_SPACE</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="s1">&#39;max_iter&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">)]</span>
+
+<span class="c1">### Optimizaion ##############################################################################################################</span>
+<span class="k">def</span> <span class="nf">cost_function</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+    <span class="n">max_iter</span> <span class="o">=</span> <span class="n">max_iter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">max_iter</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">sgd_classifier</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">sgd_predictions</span> <span class="o">=</span> <span class="n">sgd_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features_test</span><span class="p">)</span>
+    <span class="n">sgd_accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">target_test</span><span class="p">,</span> <span class="n">sgd_predictions</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">sgd_accuracy</span> <span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">STATUS_OK</span> <span class="p">}</span>
+
+<span class="n">trials</span> <span class="o">=</span> <span class="n">Trials</span><span class="p">()</span>
+<span class="n">best</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">cost_function</span><span class="p">,</span>
+    <span class="n">space</span> <span class="o">=</span> <span class="n">SEARCH_SPACE</span><span class="p">,</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">tpe</span><span class="o">.</span><span class="n">suggest</span><span class="p">,</span>
+    <span class="n">max_evals</span> <span class="o">=</span> <span class="n">MAX_EVALS</span><span class="p">,</span> 
+    <span class="n">trials</span> <span class="o">=</span> <span class="n">trials</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">max_iter</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="s1">&#39;max_iter&#39;</span><span class="p">]</span>
+<span class="n">sgd_classifier</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Predicting for one specific &#39;person&#39;  #################################################################################################</span>
+
+<span class="c1"># taking a random row from the test data to predict a result for:</span>
+<span class="k">def</span> <span class="nf">make_test_prediction</span><span class="p">(</span><span class="n">sgd_classifier</span><span class="p">):</span>
+    <span class="n">rand_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32581</span><span class="p">)</span>
+    <span class="n">test_row</span> <span class="o">=</span> <span class="n">features_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rand_index</span><span class="p">]</span>
+    <span class="n">test_groundtruth</span> <span class="o">=</span> <span class="n">target_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rand_index</span><span class="p">]</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">sgd_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">test_row</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">test_groundtruth</span><span class="p">)</span>
+
+<span class="n">prediction</span><span class="p">,</span> <span class="n">test_groundtruth</span> <span class="o">=</span> <span class="n">make_test_prediction</span><span class="p">(</span><span class="n">sgd_classifier</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">prediction</span> <span class="o">==</span> <span class="n">test_groundtruth</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="3.-Stocastic-Gradient-Boosting"><strong>3. Stocastic Gradient Boosting</strong><a class="anchor-link" href="#3.-Stocastic-Gradient-Boosting">&#182;</a></h1>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Optimizing n_estimators to reach the highest possible Accuracy</span>
+
+<span class="c1"># N_ESTIMATORS should be max the SEARCHSPACE so all possibilities are tried once</span>
+<span class="n">N_ESTIMATORS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">SEARCH_SPACE</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">,</span><span class="mi">200</span><span class="p">)]</span>
+
+<span class="c1">### Optimizaion ##############################################################################################################</span>
+<span class="k">def</span> <span class="nf">cost_function</span><span class="p">(</span><span class="n">n_estimators</span><span class="p">):</span>
+    <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">n_estimators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">n_estimators</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">sgb_classifier</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+    <span class="n">sgb_predictions</span> <span class="o">=</span> <span class="n">sgb_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features_test</span><span class="p">)</span>
+    <span class="n">sgb_accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">target_test</span><span class="p">,</span> <span class="n">sgb_predictions</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;loss&#39;</span><span class="p">:</span> <span class="o">-</span> <span class="n">sgb_accuracy</span> <span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">STATUS_OK</span> <span class="p">}</span>
+
+<span class="n">trials</span> <span class="o">=</span> <span class="n">Trials</span><span class="p">()</span>
+<span class="n">best</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">cost_function</span><span class="p">,</span>
+    <span class="n">space</span> <span class="o">=</span> <span class="n">SEARCH_SPACE</span><span class="p">,</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">tpe</span><span class="o">.</span><span class="n">suggest</span><span class="p">,</span>
+    <span class="n">max_evals</span> <span class="o">=</span> <span class="n">N_ESTIMATORS</span><span class="p">,</span> 
+    <span class="n">trials</span> <span class="o">=</span> <span class="n">trials</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>best loss: -0.8973674869175894</p>
+<p>{'n_estimators': 174}</p>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">n_estimators</span> <span class="o">=</span> <span class="n">best</span><span class="p">[</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">]</span>
+
+<span class="n">sgb_classifier</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features_train</span><span class="p">,</span> <span class="n">target_train</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;model.pickle&#39;</span>
+
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sgb_classifier</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sgb_classifier</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Verify performance / See false nagatives vs. false positives (ca: 7157 - 1855)</span>
+
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">sgb_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features_test</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">calc_metrics</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">target_test</span><span class="p">):</span>
+    <span class="n">prediction_true</span> <span class="o">=</span> <span class="n">false_negative</span> <span class="o">=</span> <span class="n">false_positive</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">87331</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">target_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">predictions</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">prediction_true</span><span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">predictions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">false_negative</span> <span class="o">+=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">predictions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">false_positive</span> <span class="o">+=</span><span class="mi">1</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">false_negative</span> <span class="o">+</span> <span class="n">false_positive</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">prediction_true</span><span class="p">,</span> <span class="n">false_negative</span><span class="p">,</span> <span class="n">false_positive</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+
+<span class="n">prediction_true</span><span class="p">,</span> <span class="n">false_negative</span><span class="p">,</span> <span class="n">false_positive</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="n">calc_metrics</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">target_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prediction_true</span><span class="p">,</span> <span class="n">false_negative</span><span class="p">,</span> <span class="n">false_positive</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Predicting for one specific &#39;person&#39; #################################################################################################</span>
+
+<span class="c1"># taking a random row from the test data to predict a result for:</span>
+<span class="k">def</span> <span class="nf">make_test_prediction</span><span class="p">(</span><span class="n">sgb_classifier</span><span class="p">):</span>
+    <span class="n">rand_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32581</span><span class="p">)</span>
+    <span class="n">test_row</span> <span class="o">=</span> <span class="n">features_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rand_index</span><span class="p">]</span> <span class="c1">#.values.flatten().tolist()</span>
+    <span class="n">test_groundtruth</span> <span class="o">=</span> <span class="n">target_test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rand_index</span><span class="p">]</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">sgb_classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">test_row</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">test_groundtruth</span><span class="p">)</span>
+
+<span class="n">prediction</span><span class="p">,</span> <span class="n">test_groundtruth</span> <span class="o">=</span> <span class="n">make_test_prediction</span><span class="p">(</span><span class="n">sgb_classifier</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">test_groundtruth</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>[0.]
+0.0
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><strong>Conclusion:</strong></p>
+<ul>
+<li>simple SGB: Best reachable Accuracy:  87.33042784359463%, with max_iter= 74</li>
+<li>Using a Pipepline/StandartScaler: Best reachable Accuracy:  100%, with max_iter = 11</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Vizualisation</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span> <span class="s2">&quot;Accent&quot;</span><span class="p">)</span>
+
+<span class="n">tids</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;tid&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trials</span><span class="o">.</span><span class="n">trials</span><span class="p">]</span>
+<span class="n">n_estimators</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="s1">&#39;misc&#39;</span><span class="p">][</span><span class="s1">&#39;vals&#39;</span><span class="p">][</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">]</span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trials</span><span class="p">]</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">tids</span><span class="p">,</span> <span class="n">n_estimators</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;n_estimators over all trials&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;trialIDs&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;./visualizations/tested_values.png&#39;</span><span class="p">)</span>
 </pre></div>
 
      </div>
