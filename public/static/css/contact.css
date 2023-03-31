@@ -1,0 +1,143 @@
+body {
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    font-family: 'Outfit', sans-serif;
+    background-color: #cad4f2;
+}
+/*Nav BAr*/
+.navsty{
+    position: relative;
+    width: 1400px;
+    height: 101px;
+    left: 45px;
+    right:45px;
+    top: 25px;
+    z-index: 0;
+    background: #f3e8d6;
+    border-radius: 35px;    
+}
+.logo-text{
+    position: absolute;
+    
+    width: 185px;
+    height: 60px;
+    left: 119px;
+    top: 13px;
+    z-index: 1;
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight:900;
+    font-size: 48px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    
+    color: #EA7015;    
+}
+.logo-text:hover{
+    color: white;
+}
+.logo_img{
+    position: absolute;
+    width: 92px;
+    height: 82px;
+    left: 100px;
+    top: 30px;
+    z-index: 1;
+    
+}
+
+.info1{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 1115px;
+    top: 30px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #EA7015;
+}
+
+.info2{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 1280px;
+    top: 30px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    
+    color: #EA7015;
+}
+
+a:link{
+    text-decoration: none;
+}
+a:hover {
+    color:rgb(182, 91, 189)
+}
+
+
+/*Actual Page content*/
+.boxie{
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    position:relative;
+    top:100px;
+    left:40px;
+    width: 300px;
+    height:550px;
+}
+.container .img-box {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 260px;
+    height: 500px;
+    object-fit:cover;
+    resize: both;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
+}
+.container:hover .img-box{
+    translate: 30px 0px;
+}
+
+.container .content-box{
+    position: absolute;
+    top:0px;
+    left:0px;
+    display: flex;
+    width: 260px;
+    height: 500px;
+    background: white;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap:0px;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;    
+}
+.container:hover .content-box{
+    translate: 0px 125px;
+}

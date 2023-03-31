@@ -1,0 +1,209 @@
+* {
+    transition: all 0.3s ease-out;
+}
+
+body {
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    font-family: 'Outfit', sans-serif;
+    background-color: #cad4f2;
+}
+/* This is the DR.YOU logo */
+.logo-text{
+    position: absolute;
+    
+    width: 185px;
+    height: 60px;
+    left: 190px;
+    top: 25px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight:900;
+    font-size: 48px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    
+    color: #EA7015;    
+}
+
+
+
+.logo_img{
+    position: absolute;
+    width: 92px;
+    height: 82px;
+    left: 125px;
+    top: 15px;
+    
+}
+/* This is for the Big "DR.YOU" logo */
+.process-logo{
+    position: absolute;
+    width: 307px;
+    height: 275px;
+    left: 228px;
+    top: 113px;
+    
+}
+
+/* This is the "Contact" section*/ 
+.info1{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 925px;
+    top: 45px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    
+    color: rgb(225 118 9);
+}
+
+/* This is the "Contact" section*/
+ .info2{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 1100px;
+    top: 45px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    
+    color: rgb(225 118 9);
+}
+
+a:link{
+    text-decoration: none;
+}
+a:hover {
+    color: white;
+}
+
+.wrapper {
+    position: absolute;
+    /*width:1440px*/;
+    height: 452px;
+    left:53px;
+    right:51px;
+    top:16px;
+    border-radius: 56px;
+    background: #f3e8d6 ;
+}
+
+
+
+
+
+.result {
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    right: 75px;
+    top: 260px;
+    color: rgb(136, 89, 184);
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 60px;
+    line-height: 60px;
+    display: flex;
+    align-items:center
+}
+
+ 
+
+.leftbox {
+    position:absolute;
+    background-color: rgb(168, 137, 198);
+    height: 509px;
+    width: 608px;
+    border-radius: 40px;
+    top:433px;
+    left:122px;
+    padding: 10px;
+    font-size: large;
+    font-weight: 600;
+    text-align: center
+}
+.leftbox:hover{
+    box-shadow: -20px 15px #EA7015;
+    translate: 0px -5px;
+}
+
+.comment {
+    position:absolute;
+    background-color: rgb(168, 137, 198);
+    height: 129px;
+    width: 434px;
+    top:813px;
+    
+    right:155px;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: large;
+    font-weight: 600;
+    text-align: center
+}
+.comment:hover{
+    box-shadow: 10px 10px #EA7015;
+    translate: 0px 5px;
+}
+
+.rightbox {
+    position:absolute;
+    background-color: rgb(168, 137, 198);
+    height: 330px;
+    width: 434px;
+    border-radius: 40px;
+    right: 155px;
+    top:433px;
+    padding: 10px;
+    font-size: large;
+    font-weight: 600;
+    text-align: center
+}
+.rightbox:hover{
+    box-shadow:10px 10px #EA7015;
+    translate: 5px -5px;
+}
+
+
+input[type=button]{
+    position: absolute;
+    width: 224px;
+    height: 59px;
+    left: 608px;
+    top: 1000px;
+    font-size: 20px;
+    cursor: pointer;
+    color:white;
+    background: #9B8FC8;
+    border-radius: 20px;
+    font-variant: small-caps;
+    border:none;
+} 
+
+input[type=button]:hover{
+    background-color: #f3e8d6;
+    color:rgb(0, 0, 0);
+    translate:0px -5px;  
+}

@@ -16,21 +16,10 @@ Description of variables in dataset: [PDF](https://www.cdc.gov/brfss/annual_data
 4. Run through ``data_clean.ipynb`` to get **brfss_clean.csv**
 5. Run through ``impute.ipynb`` to get **brfss_imputed.csv**
 
-## Building html
+## Setup Server
 
 ```bash
-jupyter nbconvert --to html reduce.ipynb ; mv reduce.html html/reduce.html
-jupyter nbconvert --to html data_clean.ipynb ; mv data_clean.html html/data_clean.html
-jupyter nbconvert --to html impute.ipynb ; mv impute.html html/impute.html
-jupyter nbconvert --to html class_model_evaluation.ipynb ; mv class_model_evaluation.html html/class_model_evaluation.html
-jupyter nbconvert --to html make_prediction.ipynb ; mv make_prediction.html html/make_prediction.html
+pip install flask
+cd public
+flask --app server run --debug
 ```
-<a href="https://ai.benpuhalski.com/reduce.html">ai.benpuhalski.com/reduce.html</a>
-
-<a href="https://ai.benpuhalski.com/data_clean.html">ai.benpuhalski.com/data_clean.html</a>
-
-<a href="https://ai.benpuhalski.com/impute.html">ai.benpuhalski.com/impute.html</a>
-
-<a href="https://ai.benpuhalski.com/class_model_evaluation.html">ai.benpuhalski.com/class_model_evaluation.html</a>
-
-<a href="https://ai.benpuhalski.com/make_prediction.html">ai.benpuhalski.com/make_prediction.html</a>

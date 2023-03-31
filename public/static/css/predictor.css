@@ -1,0 +1,168 @@
+
+body{
+    position: relative;
+    width: 1440px;
+    height: 1024px;
+    font-family: 'Outfit';
+    background: #CAD8F4;    
+}
+.navsty{
+    position: absolute;
+    width: 1400px;
+    height: 101px;
+    left: 45px;
+    right:45px;
+    top: 25px;
+    z-index: 0;
+    background: #f3e8d6;
+    border-radius: 35px;    
+}
+.logo-text{
+    position: absolute;
+    
+    width: 185px;
+    height: 60px;
+    left: 119px;
+    top: 13px;
+    z-index: 1;
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight:900;
+    font-size: 48px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    
+    color: #EA7015;    
+}
+.logo-text:hover{
+    color: white;
+}
+.logo_img{
+    position: absolute;
+    width: 92px;
+    height: 82px;
+    left: 100px;
+    top: 30px;
+    z-index: 1;
+    
+}
+
+.info1{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 1115px;
+    top: 30px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    color: #EA7015;
+}
+
+.info2{
+    position: absolute;
+    
+    width: fit-content;
+    height: fit-content;
+    left: 1280px;
+    top: 30px;
+    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    
+    color: #EA7015;
+}
+
+form{
+    position: absolute;
+    left: 279px;
+    top: 207px;
+}
+input{
+    border-radius: 10px;
+    width: 885px;
+    height: 30px;   
+    border: none;
+    padding: 5px; 
+}
+input[type=text]{
+    font-size: 20px;
+    font-family: 'Outfit';
+}
+input[type=submit]{
+    position: absolute;
+    width: 180px;
+    height: 61px;
+    left: 330px;
+    font-size: 25px; 
+
+}
+input[type=submit]:hover{
+    background-color: #2d4891;    
+}
+input[type=button]{
+    position: absolute;
+    width: 180px;
+    height: 61px;
+    left: 330px;
+    font-size: 25px;
+} 
+input[type=button]:hover{
+    background-color: #2d4891;
+}
+.s2s{
+    float:left;
+    width:420px;
+}
+p{
+    float:left;
+    font-size: larger;
+    line-height: 0px;
+}
+select{
+    border-radius: 10px;
+    width: 895px;
+    height: 43px;   
+    border: none;
+    padding: 5px;
+    outline: 0;
+    font-size: 20px;
+    font-family: 'Outfit';
+}
+
+
+label{
+    position: absolute;
+    width: fit-content;
+    height: fit-content;    
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-size: larger;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    text-transform: none;
+    
+}
+
+a:link{
+    text-decoration: none;    
+}
+a:hover {
+    color:rgb(182, 91, 189)
+}
