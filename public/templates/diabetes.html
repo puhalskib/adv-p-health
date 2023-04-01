@@ -233,9 +233,9 @@
             <label>Yes</label>
         </div>
         <div class="tab">Have you had your cholesterol checked within the past year (anytime < one year ago)?
-            <br><input type="radio" onclick="nextPrev(1)" name="cholesterol_checked_within_year" value=0>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLCHK3" value=0>
             <label>No</label>
-            <br><input type="radio" onclick="nextPrev(1)" name="cholesterol_checked_within_year" value=1>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLCHK3" value=1>
             <label>Yes</label>
         </div>
         <div class="tab">Have you ever been told by a doctor, nurse or other health professional that your cholesterol is high?
@@ -272,6 +272,75 @@
             <br><input type="radio" onclick="nextPrev(1)" name="RENTHOM1" value=2>
             <label>Other arrangement</label>
         </div>
+        <div class="tab">Have you ever (been told you) had a heart attack, also called a myocardial infarction?
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDINFR4" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDINFR4" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had angina or coronary heart disease?
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDCRHD4" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDCRHD4" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had a stroke
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDSTRK3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CVDSTRK3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had asthma
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHMA3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHMA3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you currently have asthma?
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHNOW" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHNOW" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had skin cancer?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCSCNCR" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCSCNCR" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had any other types of cancer?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCOCNCR" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCOCNCR" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had C.O.P.D. (chronic obstructive pulmonary disease), emphysema or chronic bronchitis?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCCOPD3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCCOPD3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had a depressive disorder (including depression, major depression, dysthymia, or minor depression)?
+            <br><input type="radio" onclick="nextPrev(1)" name="ADDEPEV3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ADDEPEV3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Not including kidney stones, bladder infection or incontinence, were you ever told you had kidney disease?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCKDNY2" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCKDNY2" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Has a doctor, nurse or other health professional ever told you that you had some form of arthritis, rheumatoid
+arthritis, gout, lupus, or fibromyalgia? (Arthritis diagnoses include: rheumatism, polymyalgia rheumatic, osteoarthritis
+(not osteoporosis), tendonitis, bursitis, bunion, tennis elbow, carpal tunnel syndrome, tarsal tunnel syndrome, joint
+infection, Reiter’s syndrome, ankylosing spondylitis)
+            <br><input type="radio" onclick="nextPrev(1)" name="HAVARTH5" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="HAVARTH5" value=1>
+            <label>Yes</label>
+        </div>
         <div class="tab">Have you ever served on active duty in the military?
             <br><input type="radio" onclick="nextPrev(1)" name="VETERAN3" value=0>
             <label>No</label>
@@ -292,12 +361,8 @@
             <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=5>
             <label>A student</label>
             <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=6>
-            <label>A homemaker</label>
-            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=7>
-            <label>A student</label>
-            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=8>
             <label>Retire</label>
-            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=9>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=7>
             <label>Unable to work</label>
         </div>
         <div class="tab">To your knowledge, are you now pregnant?
@@ -540,7 +605,7 @@
             <span class="step"></span>
             <span class="step"></span>
         </div> -->
-        <progress id="surveyProgress" value="0" max="56" style="width: 100%;"></progress>
+        <progress id="surveyProgress" value="0" max="61" style="width: 100%;"></progress>
     </form>
 
     <script>
