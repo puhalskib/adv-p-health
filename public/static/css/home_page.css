@@ -7,10 +7,8 @@
 
 body {
     font-family: 'Outfit', sans-serif;
-    color: var(--dark);
     background-color: #cad4f2;
 }
-
 h1 {
     font-size: 3rem;
 }
@@ -135,24 +133,23 @@ ul {
 
 /* Navigation Bar  */
 
-.main-nav {
-    margin-top: 20px;
+.navsty{
+    width: 90%;
+    height: 101px;
+    display: flex;
     justify-content: space-between;
-}
-
-.company-logo img {
-    width: 200px;
-}
-
-
-
-.logo-text{
-    position: absolute;
+    padding: 7px 15px;
+    align-items: center;
+    margin: 30px auto;
     
+}
+.logo-cont, .links{
+  display: flex;
+  align-items: center;
+}
+.logo-text{    
     width: 185px;
     height: 60px;
-    left: 165px;
-    top: 22px;
     z-index: 1;
     font-family: 'Outfit';
     font-style: normal;
@@ -161,60 +158,52 @@ ul {
     line-height: 60px;
     display: flex;
     align-items: center;
-    
+    margin-left: -20px;
     color: #EA7015;    
 }
 .logo-text:hover{
     color: white;
 }
-
 .logo_img{
-    position: absolute;
     width: 92px;
     height: 82px;
-    left: 100px;
-    top: 12px;
     z-index: 1;
     
 }
 
 .info1{
-    position: absolute;
+    
     
     width: fit-content;
     height: fit-content;
-    left: 1115px;
-    top: 30px;
+
     
     font-family: 'Outfit';
     font-style: normal;
     font-weight: 600;
     font-size: 36px;
     line-height: 45px;
-    display: flex;
-    align-items: center;
-    text-align: right;
     color: #EA7015;
 }
 
 .info2{
-    position: absolute;
-    
     width: fit-content;
-    height: fit-content;
-    left: 1280px;
-    top: 30px;
-    
+    height: fit-content;    
     font-family: 'Outfit';
     font-style: normal;
     font-weight: 600;
     font-size: 36px;
     line-height: 45px;
-    display: flex;
-    align-items: center;
-    text-align: right;
+    margin-left: 30px;
     
     color: #EA7015;
+}
+
+a:link{
+    text-decoration: none;
+}
+a:hover {
+    color:rgb(182, 91, 189)
 }
 
 .nav-links {
@@ -305,9 +294,10 @@ header {
 .example-card {
     width: 23.5%;
     position: relative;
-    left: 465px;
+    left: 37.5%;
     min-height: 320px;
     margin-bottom: 20px;
+    border-radius: 30px;
     background-image: linear-gradient(13deg, rgba(1,74,214,1) 0%, rgba(0,113,197,1) 40%, rgba(0,212,255,1) 100%);
     background-size: contain;
     text-align: center;

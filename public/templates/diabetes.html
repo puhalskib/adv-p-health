@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css?family=Outfit" rel="stylesheet">
-<link rel="stylesheet" href="../static/css/diabetes.css">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Outfit" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/diabetes.css">
+    <title>Predictor-Dr.You</title>
+</head>
+
 
 <body>
-    <div class="header">
-        <a href="#default" class="logo">DR. YOU</a>
-        <div class="header-right">
-            <!-- <a class="active" href="#home">Home</a> -->
-
-            <a href="#contact">Contact</a>
-            <a href="#about">About</a>
+<nav class="navsty">
+        <div class="logo-cont">
+            <img src="..\static\Images\Dr.You Logo.png" class="logo_img">
+            <a class="logo-text" href="index.html">DR.YOU</a>
         </div>
-    </div>
+        <div class="links">
+            <a class="info1" href="contact.html">contact</a> 
+            <a class="info2 active" href="about.html">about</a> 
+        </div>    
+    </nav>
     <!-- <form id="regForm" action="/predict" method="post"> -->
     <form id="regForm" method="POST">
         <!-- <h1>Register:</h1> -->
@@ -459,21 +464,12 @@ infection, Reiter’s syndrome, ankylosing spondylitis)
             </select>
         </div>
 
-
-        <div style="overflow:auto;">
-            <div style="float:right;">
-                <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
-            </div>
+            
+        <div class="navigate">
+            <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+            <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
         </div>
-        <!-- Circles which indicates the steps of the form: -->
-        <!-- <div style="text-align:center;margin-top:40px;">
-            <span class="step"></span>
-            <span class="step"></span>
-            <span class="step"></span>
-            <span class="step"></span>
-        </div> -->
-        <progress id="surveyProgress" value="0" max="61" style="width: 100%;"></progress>
+        <progress id="surveyProgress" value="0" max="61"></progress>
     </form>
 
     <script src="../static/JS/diabetes.js"></script>

@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 .top-section{
-    background-color:  #cad4f2;
     min-height: 100vh;
 }
 
@@ -195,13 +194,3 @@ a:hover {
     text-decoration: none;
 }
 
-@media screen and (max-width: 500px) {
-    
-    .logo-text, .logo_img, .info1, .info2 {
-        float: none;
-        display: block;
-        text-align: left;
-    }
-
-
-}
