@@ -133,3 +133,14 @@ a:hover {
 .container:hover .content-box{
     translate: 0px 125px;
 }
+@media screen and (max-width: 800px) {
+    .boxie {
+      flex-direction: column; 
+    }
+    .container:hover .img-box{
+        translate: 0px -10px;
+    }
+    .container:hover .content-box{
+        translate: 130px 40px;
+    }
+  }
