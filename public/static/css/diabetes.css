@@ -6,7 +6,11 @@
 body {
     font-family: 'Outfit', sans-serif;
     background-color: #cad4f2;
+    background-image: url('../Images/blobs.png');
+    background-size: cover;
+    background-attachment: fixed;
 }
+
 /*Nav BAr*/
 .navsty{
     width: 90%;
