@@ -194,3 +194,14 @@ a:hover {
     left: 30px;
     text-decoration: none;
 }
+
+@media screen and (max-width: 500px) {
+    
+    .logo-text, .logo_img, .info1, .info2 {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+
+}
