@@ -1,13 +1,15 @@
 * {
+    margin: 0;
     transition: all 0.3s ease-out;
 }
 
 body {
-    position: relative;
-    width: 1440px;
-    height: 1024px;
     font-family: 'Outfit', sans-serif;
     background-color: #cad4f2;
+    background-image: url('../Images/blobs.png');
+    background-size: cover;
+    background-attachment: fixed;
+
 }
 /* This is the DR.YOU logo */
 .logo-text{
@@ -140,9 +142,11 @@ a:hover {
     top:433px;
     left:122px;
     padding: 10px;
-    font-size: large;
+    font-size: x-large;
     font-weight: 600;
-    text-align: center
+    text-align: center;
+    line-height: 2;
+    
 }
 .leftbox:hover{
     box-shadow: -20px 15px #EA7015;
@@ -159,7 +163,7 @@ a:hover {
     right:155px;
     border-radius: 20px;
     padding: 10px;
-    font-size: large;
+    font-size: x-large;
     font-weight: 600;
     text-align: center
 }
@@ -177,7 +181,8 @@ a:hover {
     right: 155px;
     top:433px;
     padding: 10px;
-    font-size: large;
+    line-height: 1.2;
+    font-size: x-large;
     font-weight: 600;
     text-align: center
 }
