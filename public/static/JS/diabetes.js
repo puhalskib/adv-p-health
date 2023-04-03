@@ -22,8 +22,7 @@ function showTab(n) {
     fixStepIndicator(n)
 }
 
-//var radioInput = document.getElementsByClassName('radioInput');
-//radioInput.onclick = 
+
 
 function nextPrev(n) {
       // This function will figure out which tab to display
@@ -60,21 +59,13 @@ function validateForm() {
             }
     }
     // If the valid status is true, mark the step as finished and valid:
-    //if (valid) {
-        //    document.getElementsByClassName("step")[currentTab].className += " finish";
-    //}
+
     return valid; // return the valid status
 }
 
 function fixStepIndicator(n) {
     // This function removes the "active" class of all steps...
-    /*var i, x = document.getElementsByClassName("step");
-    for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
-            }
-            //... and adds the "active" class to the current step:
-            x[n].className += " active"; */
     document.getElementById("surveyProgress").value=n
-    //console.log("n="+n);
+   
             
 }

@@ -22,9 +22,7 @@ def about():
 def contact():
     return render_template('contact.html')
 
-#@app.route("/")
-#def predict():
-#    return send_from_directory('public/templates', path='index.html')
+
 @app.route("/")
 def predict():
     return render_template('index.html')
@@ -33,25 +31,9 @@ def predict():
 def heart_form():
     # handle the POST request
     if request.method == 'POST':
-        #request_data = request.get_json()
-        #SEXVAR = request_data['SEXVAR']
-        #print(type(pd.DataFrame.from_dict(request.form.copy().to_dict())))
         p = pd.DataFrame(request.form.copy().to_dict(), index=[0])
-        #print(pd.DataFrame(request.form.copy().to_dict(), index=[0]))
-        #print(type(pd.DataFrame(request.form.copy().to_dict(), index=[0])))
-        #print(pd.DataFrame(request.form.copy().to_dict(), index=[0]).describe())
-        #print(type(request.form.copy().to_dict()))
-        #print(pd.DataFrame.from_dict(request.form.copy().to_dict()))
-        #print(request.form.copy().to_dict())
-        #SEXVAR = request.form.get('SEXVAR')
-        #GENHLTH = request.form.get('GENHLTH')
-        #PHYSHLTH = request.form.get('PHYSHLTH')
-        #MENTHLTH = request.form.get('MENTHLTH')
-        #p = pd.read_csv('./test_row.csv')
+
         p = p.astype(float)
-        #p.to_csv('./input_test.csv')
-        #framework = request.form.get('framework')
-        #return "prediction {}.".format(automl.predict(p))
 
         #begin conversion to trained dataframe
         # BPHIGH6
@@ -291,22 +273,16 @@ def heart_form():
         'USENOW3_was_missing',
         'ECIGNOW1_was_missing',
         '_EDUCAG_was_missing']
-        #was_missing_df = pd.DataFrame(0, index=np.arange(len(data)), columns=was_missing_columns)
+        
         was_missing_df = pd.DataFrame(0, index=[0],columns=was_missing_columns)
         final=pd.concat([p,was_missing_df], axis=1)
         final = final.round(2)
-        #final.to_csv('./input_final.csv')
+        
         print(final.to_numpy())
         if heartml.predict(final)[0] == 1:
             return render_template('heart1.html')
         else:
             return render_template('heart0.html')
-        #return str(heartml.predict(final)[0])
-        #'''
-        #    <h1>The SEXVAR value is: {}</h1>
-        #    <h1>The GENHLTH value is: {}</h1>
-        #    <h1>The PHYSHLTH value is: {}</h1>
-        #    <h1>The MENTHLTH value is: {}</h1>'''.format(SEXVAR, GENHLTH, PHYSHLTH, MENTHLTH)
 
     # otherwise handle the GET request
     return send_from_directory('templates', path='heart.html')
@@ -317,25 +293,10 @@ def heart_form():
 def form_example():
     # handle the POST request
     if request.method == 'POST':
-        #request_data = request.get_json()
-        #SEXVAR = request_data['SEXVAR']
-        #print(type(pd.DataFrame.from_dict(request.form.copy().to_dict())))
+
         p = pd.DataFrame(request.form.copy().to_dict(), index=[0])
-        #print(pd.DataFrame(request.form.copy().to_dict(), index=[0]))
-        #print(type(pd.DataFrame(request.form.copy().to_dict(), index=[0])))
-        #print(pd.DataFrame(request.form.copy().to_dict(), index=[0]).describe())
-        #print(type(request.form.copy().to_dict()))
-        #print(pd.DataFrame.from_dict(request.form.copy().to_dict()))
-        #print(request.form.copy().to_dict())
-        #SEXVAR = request.form.get('SEXVAR')
-        #GENHLTH = request.form.get('GENHLTH')
-        #PHYSHLTH = request.form.get('PHYSHLTH')
-        #MENTHLTH = request.form.get('MENTHLTH')
-        #p = pd.read_csv('./test_row.csv')
+
         p = p.astype(float)
-        #p.to_csv('./input_test.csv')
-        #framework = request.form.get('framework')
-        #return "prediction {}.".format(automl.predict(p))
 
         #begin conversion to trained dataframe
         # BPHIGH6
@@ -575,22 +536,17 @@ def form_example():
         'USENOW3_was_missing',
         'ECIGNOW1_was_missing',
         '_EDUCAG_was_missing']
-        #was_missing_df = pd.DataFrame(0, index=np.arange(len(data)), columns=was_missing_columns)
+        
         was_missing_df = pd.DataFrame(0, index=[0],columns=was_missing_columns)
         final=pd.concat([p,was_missing_df], axis=1)
         final = final.round(2)
-        #final.to_csv('./input_final.csv')
+        
         print(final.to_numpy())
         if automl.predict(final)[0] == 1:
             return render_template('process1.html')
         else:
             return render_template('process0.html')
-        #return str(automl.predict(final)[0])
-        #'''
-        #    <h1>The SEXVAR value is: {}</h1>
-        #    <h1>The GENHLTH value is: {}</h1>
-        #    <h1>The PHYSHLTH value is: {}</h1>
-        #    <h1>The MENTHLTH value is: {}</h1>'''.format(SEXVAR, GENHLTH, PHYSHLTH, MENTHLTH)
+
 
     # otherwise handle the GET request
     return send_from_directory('templates', path='diabetes.html')
