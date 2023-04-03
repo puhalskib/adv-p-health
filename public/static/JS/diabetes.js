@@ -75,6 +75,6 @@ function fixStepIndicator(n) {
             //... and adds the "active" class to the current step:
             x[n].className += " active"; */
     document.getElementById("surveyProgress").value=n
-    console.log("n="+n);
+    //console.log("n="+n);
             
 }

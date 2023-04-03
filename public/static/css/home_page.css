@@ -292,10 +292,10 @@ header {
 }
 
 .example-card {
-    width: 23.5%;
+    width: 50%;
     position: relative;
-    left: 37.5%;
-    min-height: 320px;
+    left: 25%;
+    min-height: 150px;
     margin-bottom: 20px;
     border-radius: 30px;
     background-image: linear-gradient(13deg, rgba(1,74,214,1) 0%, rgba(0,113,197,1) 40%, rgba(0,212,255,1) 100%);
@@ -314,7 +314,7 @@ header {
 
 .card-text {
     position: absolute;
-    top:47.5%;
+    top:30%;
     width: 100%;
     text-align: center;
     font-size: 30px;

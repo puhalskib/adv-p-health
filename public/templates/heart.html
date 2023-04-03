@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Outfit" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/diabetes.css">
+    <title>Predictor-Dr.You</title>
+</head>
+
+
+<body>
+<nav class="navsty">
+        <div class="logo-cont">
+            <img src="..\static\Images\Dr.You Logo.png" class="logo_img">
+            <a class="logo-text" href="index.html">DR.YOU</a>
+        </div>
+        <div class="links">
+            <a class="info1" href="contact.html">contact</a> 
+            <a class="info2" href="about.html">about</a> 
+        </div>    
+    </nav>
+    <!-- <form id="regForm" action="/predict" method="post"> -->
+    <form id="regForm" method="POST">
+        <!-- <h1>Register:</h1> -->
+        <!-- One "tab" for each step in the form: -->
+        <div class="tab">What is your sex?
+            <!--<p><input placeholder="First name..." oninput="this.className = ''" name="fname"></p>
+            <p><input placeholder="Last name..." oninput="this.className = ''" name="lname"></p> -->
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="SEXVAR" value=0>
+            <label>female</label>
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="SEXVAR" value=1>
+            <label>male</label>
+        </div>
+        <div class="tab">What would you say your general health is?
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="GENHLTH" value=0>
+            <label>Excellent</label>
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="GENHLTH" value=1>
+            <label>Very good</label>
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="GENHLTH" value=2>
+            <label>Good</label>
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="GENHLTH" value=3>
+            <label>Fair</label>
+            <br>
+            <input type="radio" onclick="nextPrev(1)" name="GENHLTH" value=4>
+            <label>Poor</label>
+        </div>
+        <div class="tab">Including physical illness and injury,
+             how many days during the past 30 days was your physical health not good?
+            <p><input placeholder="Enter number of days: 0-30" oninput="this.className = ''" name="PHYSHLTH"></p>
+        </div>
+        <div class="tab">Including stress, depression, and problems with emotions,
+             how many days during the past 30 days was your mental health not good?
+            <p><input placeholder="Enter number of days: 0-30" oninput="this.className = ''" name="MENTHLTH"></p>
+        </div>
+        <div class="tab">During the past 30 days, for about how many days did poor physical or mental health keep you from doing
+            your usual activities, such as self-care, work, or recreation?
+            <p><input placeholder="Enter number of days: 0-30" oninput="this.className = ''" name="POORHLTH"></p>
+        </div>
+        <div class="tab">Do you have one person (or a group of doctors) that you think of as your personal health care provider?
+            <br><input type="radio" onclick="nextPrev(1)" name="PERSDOC3" value=0>
+            <label>No doctor</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="PERSDOC3" value=1>
+            <label>A doctor (or more than 1)</label>
+        </div>
+        <div class="tab">Was there a time in the past 12 months when you needed to see a doctor but could not because you could
+            not afford it
+            <br><input type="radio" onclick="nextPrev(1)" name="MEDCOST1" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MEDCOST1" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you visited a doctor for a routine checkup within the past year (< 12 months ago)? [A routine checkup is
+            a general physical exam, not an exam for a specific injury, illness, or condition.
+            <br><input type="radio" onclick="nextPrev(1)" name="CHECKUP1" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHECKUP1" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">During the past month, other than your regular job, did you participate in any physical activities or exercises
+            such as running, calisthenics, golf, gardening, or walking for exercise?
+            <br><input type="radio" onclick="nextPrev(1)" name="EXERANY2" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EXERANY2" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever been told by a doctor, nurse or other health professional that you have high blood pressure?
+            <br><input type="radio" onclick="nextPrev(1)" name="BPHIGH6" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="BPHIGH6" value=1>
+            <label>Borderline high or pre-hypertensive or elevated blood pressure</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="BPHIGH6" value=2>
+            <label>Yes, but only during pregnancy</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="BPHIGH6" value=3>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you currently taking medicine for your high blood pressure?
+            <br><input type="radio" onclick="nextPrev(1)" name="BPMEDS" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="BPMEDS" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you had your cholesterol checked within the past year (anytime < one year ago)?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLCHK3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLCHK3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever been told by a doctor, nurse or other health professional that your cholesterol is high?
+            <br><input type="radio" onclick="nextPrev(1)" name="TOLDHI3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="TOLDHI3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you currently taking medicine prescribed by your doctor or other health professional for your cholesterol?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLMED3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHOLMED3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you: 
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=0>
+            <label>Married</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=1>
+            <label>Divorced</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=2>
+            <label>Widowed</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=3>
+            <label>Seperated</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=4>
+            <label>Never married</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="MARITAL" value=5>
+            <label>A member of an unmarried couple</label>
+        </div>
+        <div class="tab">Do you own or rent your home?
+            <br><input type="radio" onclick="nextPrev(1)" name="RENTHOM1" value=0>
+            <label>Own</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="RENTHOM1" value=1>
+            <label>Rent</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="RENTHOM1" value=2>
+            <label>Other arrangement</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had asthma
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHMA3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHMA3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you currently have asthma?
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHNOW" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ASTHNOW" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had skin cancer?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCSCNCR" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCSCNCR" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had any other types of cancer?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCOCNCR" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCOCNCR" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had C.O.P.D. (chronic obstructive pulmonary disease), emphysema or chronic bronchitis?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCCOPD3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCCOPD3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had a depressive disorder (including depression, major depression, dysthymia, or minor depression)?
+            <br><input type="radio" onclick="nextPrev(1)" name="ADDEPEV3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ADDEPEV3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Not including kidney stones, bladder infection or incontinence, were you ever told you had kidney disease?
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCKDNY2" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="CHCKDNY2" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever (been told you) had diabetes?
+            <br><input type="radio" onclick="nextPrev(1)" name="DIABETE4" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DIABETE4" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Has a doctor, nurse or other health professional ever told you that you had some form of arthritis, rheumatoid
+arthritis, gout, lupus, or fibromyalgia? (Arthritis diagnoses include: rheumatism, polymyalgia rheumatic, osteoarthritis
+(not osteoporosis), tendonitis, bursitis, bunion, tennis elbow, carpal tunnel syndrome, tarsal tunnel syndrome, joint
+infection, Reiter’s syndrome, ankylosing spondylitis)
+            <br><input type="radio" onclick="nextPrev(1)" name="HAVARTH5" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="HAVARTH5" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever served on active duty in the military?
+            <br><input type="radio" onclick="nextPrev(1)" name="VETERAN3" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="VETERAN3" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you currently: 
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=0>
+            <label>Employed for wages</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=1>
+            <label>Self-employed</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=2>
+            <label>Out of work for 1 year or more</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=3>
+            <label>Out of work for < 1 year</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=4>
+            <label>A homemaker</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=5>
+            <label>A student</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=6>
+            <label>Retire</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="EMPLOY1" value=7>
+            <label>Unable to work</label>
+        </div>
+        <div class="tab">To your knowledge, are you now pregnant?
+            <br><input type="radio" onclick="nextPrev(1)" name="PREGNANT" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="PREGNANT" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you deaf or do you have serious difficulty hearing?
+            <br><input type="radio" onclick="nextPrev(1)" name="DEAF" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DEAF" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Are you blind or do you have serious difficulty seeing, even when wearing glasses?
+            <br><input type="radio" onclick="nextPrev(1)" name="BLIND" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="BLIND" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Because of a physical, mental, or emotional condition, do you have serious difficulty concentrating, remembering, or making decisions?
+            <br><input type="radio" onclick="nextPrev(1)" name="DECIDE" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DECIDE" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you have serious difficulty walking or climbing stairs?
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFWALK" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFWALK" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you have difficulty dressing or bathing?
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFDRES" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFDRES" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Because of a physical, mental, or emotional condition, do you have difficulty doing errands alone such as visiting a doctor ́ s office or shopping
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFALON" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="DIFFALON" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you smoked at least 100 cigarettes in your entire life? [Note: 5 packs = 100 cigarettes]
+            <br><input type="radio" onclick="nextPrev(1)" name="SMOKE100" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="SMOKE100" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you now smoke cigarettes every day, some days, or not at all?
+            <br><input type="radio" onclick="nextPrev(1)" name="SMOKDAY2" value=0>
+            <label>Every day</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="SMOKDAY2" value=1>
+            <label>Some days</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="SMOKDAY2" value=2>
+            <label>Not at all</label>
+        </div>
+        <div class="tab">Do you currently use chewing tobacco, snuff, or snus every day, some days, or not at all? (Snus (Swedish for snuff) is a moist smokeless tobacco, usually sold in small pouches that are placed under the lip against the gum.)
+            <br><input type="radio" onclick="nextPrev(1)" name="USENOW3" value=0>
+            <label>Every day</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="USENOW3" value=1>
+            <label>Some days</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="USENOW3" value=2>
+            <label>Not at all</label>
+        </div>
+        <div class="tab">Do you now use e-cigarettes or other electronic vaping products every day, some days, or not at all?
+            <br><input type="radio" onclick="nextPrev(1)" name="ECIGNOW1" value=0>
+            <label>Every day</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ECIGNOW1" value=1>
+            <label>Some days</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ECIGNOW1" value=2>
+            <label>Not at all</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="ECIGNOW1" value=3>
+            <label>Never used e-cigs</label>
+        </div>
+        <div class="tab">During the past 30 days, how many days per month did you have at least one drink of any alcoholic beverage such as beer, wine, a malt beverage or liquor?
+            <p><input placeholder="Enter number of days: 0-30" oninput="this.className = ''" name="ALCDAY5"></p>
+        </div>
+        <div class="tab">One drink is equivalent to a 12-ounce beer, a 5-ounce glass of wine, or a drink with one shot of liquor. During the past 30 days, on the days when you drank, about how many drinks did you drink on the average? (A 40 ounce beer would count as 3 drinks, or a cocktail drink with 2 shots would count as 2 drinks.)
+            <p><input placeholder="Enter number of drinks: 0-76" oninput="this.className = ''" name="AVEDRNK3"></p>
+        </div>
+        <div class="tab">Considering all types of alcoholic beverages, how many times during the past 30 days did you have 5 or more drinks for men or 4 or more drinks for women on an occasion
+            <p><input placeholder="Enter number of times: 0-76" oninput="this.className = ''" name="DRNK3GE5"></p>
+        </div>
+        <div class="tab">During the past 30 days, what is the largest number of drinks you had on any occasion?
+            <p><input placeholder="Enter number of drinks: 0-76" oninput="this.className = ''" name="MAXDRNKS"></p>
+        </div>
+        <div class="tab">During the past 12 months, have you had either flu vaccine that was sprayed in your nose or flu shot injected into your arm?
+            <br><input type="radio" onclick="nextPrev(1)" name="FLUSHOT7" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="FLUSHOT7" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Have you ever had a pneumonia shot also known as a pneumococcal vaccine?
+            <br><input type="radio" onclick="nextPrev(1)" name="PNEUVAC4" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="PNEUVAC4" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Including fluid testing from your mouth, but not including tests you may have had for blood donation, have you ever been tested for H.I.V?
+            <br><input type="radio" onclick="nextPrev(1)" name="HIVTST7" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="HIVTST7" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you live in a metropolitan area?
+            <br><input type="radio" onclick="nextPrev(1)" name="_METSTAT" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_METSTAT" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">Do you live in a(n)...
+            <br><input type="radio" onclick="nextPrev(1)" name="_URBSTAT" value=0>
+            <label>Rural county</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_URBSTAT" value=1>
+            <label>Urban county</label>
+        </div>
+        <div class="tab">What do you consider to be your race/ethnicity?
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=0>
+            <label>White, Non-Hispanic</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=1>
+            <label>Black, Non-Hispanic</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=2>
+            <label>Asian, Non-Hispanic</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=3>
+            <label>American Indian/Alaskan Native, Non-Hispanic</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=4>
+            <label>Hispanic</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_IMPRACE" value=5>
+            <label>Other race, Non-Hispanic</label>
+        </div>
+        <div class="tab">Do you have some form of health insurance?
+            <br><input type="radio" onclick="nextPrev(1)" name="_HLTHPLN" value=0>
+            <label>No</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_HLTHPLN" value=1>
+            <label>Yes</label>
+        </div>
+        <div class="tab">How old are you?
+            <p><input placeholder="Enter 18-80 years old" oninput="this.className = ''" name="_AGE80"></p>
+        </div>
+        <div class="tab">How tall are you in inches?
+            <p><input placeholder="Enter 36-95 inches" oninput="this.className = ''" name="HTIN4"></p>
+        </div>
+        <div class="tab">How much do you weigh in kilograms?
+            <p><input placeholder="Enter 23.00-295.00 kg" oninput="this.className = ''" name="WTKG3"></p>
+        </div>
+        <div class="tab">What Level of education have you completed?
+            <br><input type="radio" onclick="nextPrev(1)" name="_EDUCAG" value=0>
+            <label>Did not graduate High School</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_EDUCAG" value=1>
+            <label>Graduated High School</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_EDUCAG" value=2>
+            <label>Attended College or Technical School</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_EDUCAG" value=3>
+            <label>Graduated from College or Technical School</label>
+        </div>
+        <div class="tab">What is your annual income?
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=1>
+            <label>Less than $15,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=2>
+            <label>$15,000 to < $25,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=3>
+            <label>$25,000 to < $35,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=4>
+            <label>$35,000 to < $50,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=5>
+            <label>$50,000 to < $100,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=6>
+            <label>$100,000 to < $200,000</label>
+            <br><input type="radio" onclick="nextPrev(1)" name="_INCOMG1" value=7>
+            <label>$200,000 or more</label>
+        </div>
+        <div class="tab">Not including fruit-flavored drinks or fruit juices with added sugar, how often did you drink 100% fruit juice such as apple or orange juice?
+            <p><input placeholder="number" oninput="this.className = ''" name="FTJUDA2_"></p> times per 
+            <select name="FTJUDA2_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+        <div class="tab">Not including juices, how often did you eat fruit?
+            <p><input placeholder="number" oninput="this.className = ''" name="FRUTDA2_"></p> times per 
+            <select name="FRUTDA2_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+        <div class="tab">How often did you eat a green leafy or lettuce salad, with or without other vegetables?
+            <p><input placeholder="number" oninput="this.className = ''" name="GRENDA1_"></p> times per 
+            <select name="GRENDA1_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+        <div class="tab">How often did you eat any kind of fried potatoes, including french fries, home fries, or hash browns?
+            <p><input placeholder="number" oninput="this.className = ''" name="FRNCHDA_"></p> times per 
+            <select name="FRNCHDA_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+        <div class="tab">How often did you eat any other kind of potatoes, or sweet potatoes, such as baked, boiled, mashed potatoes, or potato salad?
+            <p><input placeholder="number" oninput="this.className = ''" name="POTADA1_"></p> times per 
+            <select name="POTADA1_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+        <div class="tab">Not including lettuce salads and potatoes, how often did you eat other vegetables?
+            <p><input placeholder="number" oninput="this.className = ''" name="VEGEDA2_"></p> times per 
+            <select name="VEGEDA2_2">
+                <option value=0>day</option>
+                <option value=1>week</option>
+                <option value=2>month</option>
+                <option value=3>year</option>
+            </select>
+        </div>
+
+            
+        <div class="navigate">
+            <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+            <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+        </div>
+        <progress id="surveyProgress" value="0" max="59"></progress>
+    </form>
+
+    <script src="../static/JS/diabetes.js"></script>
+</body>
+
+</html>
